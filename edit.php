@@ -112,7 +112,7 @@
             <input type="hidden" name="author_id[]" value="<?= $author['id']; ?>"> <!-- Store author IDs -->
             <label for="author_first_name[]">First name <br></label><input type="text" name="author_first_name[]" value="<?= htmlspecialchars($author['first_name']); ?>" placeholder="First Name" required> <br>
             <label for="author_last_name[]">Last name <br></label><input type="text" name="author_last_name[]" value="<?= htmlspecialchars($author['last_name']); ?>" placeholder="Last Name" required><br><br>
-            <button type="submit" name="delete_author_id[]" value="<?= $author['id']; ?>"> Delete </button>
+            <button type="submit" name="delete_author_id[]" value="<?= $author['id']; ?>"> Delete </button> <br><br>
             
         <?php endforeach; ?>
         <h3>Add New Authors:</h3>
