@@ -41,7 +41,7 @@ $action_url = "./delete.php?id=" . urlencode($book['id']);
     <title><?= htmlspecialchars($book['title']); ?></title>
 </head>
 <body>
-    <h1>Book Details</h1>
+    <h2>Book Details</h2>
 
     <img src="<?= htmlspecialchars($book['cover_path']); ?>" alt="">
     
@@ -59,7 +59,7 @@ $action_url = "./delete.php?id=" . urlencode($book['id']);
 
     <h3>Language: <?= htmlspecialchars($book['language']); ?></h3>
 
-    <a href="./edit.php?id=<?= $book['id']; ?>">Edit</a>
+    <a href="./edit.php?id=<?= $book['id']; ?>">Edit</a> <br><br>
 
     <a href="./index.php?search=<?= urlencode($_GET['search'] ?? '') ?>">Homepage</a>
     

@@ -101,23 +101,23 @@
 
     <form action="./edit.php?id=<?= $book['id']; ?>" method="post">
         <input type="hidden" name="id" value="<?= $book['title']; ?>">
-        <input type="text" name="title" value="<?= $book['title']; ?>" style="width: 240px;">
-        <input type="text" name="release_date" value= "<?= $book['release_date']; ?>">
-        <input type="number" step="0.01" name="price" value="<?= $book['price']; ?>">
-        <input type="text" name="language" value="<?= $book['language']; ?>">
+        <label for="title">Title</label><br> <input type="text" name="title" value="<?= $book['title']; ?>" style="width: 240px;"><br><br>
+        <label for="release_date">Release Date</label><br> <input type="text" name="release_date" value= "<?= $book['release_date']; ?>"><br><br>
+        <label for="price">Price</label><br> <input type="number" step="0.01" name="price" value="<?= $book['price']; ?>"><br><br>
+        <label for="language">Language</label><br> <input type="text" name="language" value="<?= $book['language']; ?>"><br><br>
         <input type="submit" name="submit_book" value="Save">
          <h3>Authors:</h3>
         <?php foreach ($authors as $author): ?>
             
             <input type="hidden" name="author_id[]" value="<?= $author['id']; ?>"> <!-- Store author IDs -->
-            <input type="text" name="author_first_name[]" value="<?= htmlspecialchars($author['first_name']); ?>" placeholder="First Name" required>
-            <input type="text" name="author_last_name[]" value="<?= htmlspecialchars($author['last_name']); ?>" placeholder="Last Name" required>
+            <label for="author_first_name[]">First name <br></label><input type="text" name="author_first_name[]" value="<?= htmlspecialchars($author['first_name']); ?>" placeholder="First Name" required> <br>
+            <label for="author_last_name[]">Last name <br></label><input type="text" name="author_last_name[]" value="<?= htmlspecialchars($author['last_name']); ?>" placeholder="Last Name" required><br><br>
             <button type="submit" name="delete_author_id[]" value="<?= $author['id']; ?>"> Delete </button>
             
         <?php endforeach; ?>
         <h3>Add New Authors:</h3>
         <div id="newAuthorsContainer">
-        <input type="text" name="new_author_first_name[]" placeholder="First Name">
+        <input type="text" name="new_author_first_name[]" placeholder="First Name"><br><br>
         <input type="text" name="new_author_last_name[]" placeholder="Last Name">
         </div>
     <br>
