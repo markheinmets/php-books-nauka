@@ -16,6 +16,11 @@
     $stmtAuthors->execute(['book_id' => $id]);
     $authors = $stmtAuthors->fetchAll();
 
+    $availableAuthorsStmt = $pdo->prepare('SELECT * FROM authors WHERE id NOT IN (SELECT author_id FROM book_authors WHERE book_id = :id)');
+    $availableAuthorsStmt->execute(['id'=> $id]);
+    // var_dump($book);
+    
+
     if ( isset($_POST['submit_book']) && $_POST['submit_book'] == 'Save' ) {
         $stmt = $pdo->prepare('UPDATE books SET title = :title, release_date = :release_date, price = :price, language = :language WHERE id = :id');
         $stmt->execute([
@@ -88,6 +93,14 @@
         exit();
     }
 
+    if ( isset($_POST['add_author']) && $_POST['add_author'] == 'add_author' ) {
+        require_once('./connection.php');
+        $stmt = $pdo->prepare('INSERT INTO book_authors (book_id, author_id) VALUES (:book_id, :author_id)');
+        $stmt->execute(['book_id' => $_POST['book_id'], 'author_id' => $_POST['author_id']
+        ]);
+        }
+      
+
 ?>
 
 <!DOCTYPE html>
@@ -106,24 +119,36 @@
         <label for="price">Price</label><br> <input type="number" step="0.01" name="price" value="<?= $book['price']; ?>"><br><br>
         <label for="language">Language</label><br> <input type="text" name="language" value="<?= $book['language']; ?>"><br><br>
         <input type="submit" name="submit_book" value="Save">
+    </form>
          <h3>Authors:</h3>
-        <?php foreach ($authors as $author): ?>
-            
+         <?php foreach ($authors as $author): ?>
             <input type="hidden" name="author_id[]" value="<?= $author['id']; ?>"> <!-- Store author IDs -->
             <label for="author_first_name[]">First name <br></label><input type="text" name="author_first_name[]" value="<?= htmlspecialchars($author['first_name']); ?>" placeholder="First Name" required> <br>
             <label for="author_last_name[]">Last name <br></label><input type="text" name="author_last_name[]" value="<?= htmlspecialchars($author['last_name']); ?>" placeholder="Last Name" required><br><br>
             <button type="submit" name="delete_author_id[]" value="<?= $author['id']; ?>"> Delete </button> <br><br>
-            
-        <?php endforeach; ?>
-        <h3>Add New Authors:</h3>
-        <div id="newAuthorsContainer">
-        <input type="text" name="new_author_first_name[]" placeholder="First Name"><br><br>
-        <input type="text" name="new_author_last_name[]" placeholder="Last Name">
-        </div>
-    <br>
-    <button type="submit" name="add_new_author">Add Another Author</button>
+            <?php endforeach; ?>
+            <h3>Add New Authors:</h3>
+            <form action="./edit.php?id=<?= $book['id']; ?>" method="post">
+                <input type="hidden" name="book_id" value="<?= $book['id']; ?>">
+                <select name="author_id">
+                    <option value=""></option>
+                    <?php while ($author = $availableAuthorsStmt->fetch()) { ?>
+                        <option value="<?= $author['id']; ?>">
+                            <?=$author['first_name']; ?> <?= $author['last_name']; ?>
+                        </option>
+                        <?php } ?>
+                    </select>
+                    <button type="submit" name="add_author" value="add_author">Add author</button>
+                </form> <br>
+                <div id="newAuthorsContainer">
+                    <form action="./edit.php?id=<?= $book['id']; ?>">
+                        <input type="text" name="new_author_first_name[]" placeholder="First Name"><br><br>
+                        <input type="text" name="new_author_last_name[]" placeholder="Last Name">
+                        <button type="submit" name="add_new_author">Add Another Author</button>
+                    </form>
+                </div>
 
-    </form>
+    
     <br><br>
     <a href="./book.php?id=<?= $book['id']; ?>">
         back
